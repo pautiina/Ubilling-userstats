@@ -342,7 +342,8 @@ function zbs_AddressGetFulladdresslist() {
  * @return array
  */
 function zbs_UserGetStargazerData($login) {
-    $login = mysql_real_escape_string($login);
+	global $loginDB;
+	$login=$loginDB->real_escape_string($login);
     $query = "SELECT * from `users` WHERE `login`='" . $login . "'";
     $result = simple_query($query);
     return($result);
@@ -739,7 +740,8 @@ function zbs_UserShowXmlAgentData($login) {
  * @return int
  */
 function zbs_PaymentIDGet($login) {
-    $login = mysql_real_escape_string($login);
+	global $loginDB;
+    $login=$loginDB->real_escape_string($login);
     $query = "SELECT `virtualid` from `op_customers` WHERE `realid`='" . $login . "'";
     $result = simple_query($query);
     if (!empty($result)) {
@@ -784,8 +786,9 @@ function zbs_TariffGetSpeed($tariff) {
  * @return int
  */
 function zbs_SpeedGetOverride($login) {
+	global $loginDB;
+    $login=$loginDB->real_escape_string($login);
     $offset = 1024;
-    $login = mysql_real_escape_string($login);
     $query = "SELECT * from `userspeeds` WHERE `login`='" . $login . "'";
     $speedData = simple_query($query);
     $result = 0;
@@ -836,8 +839,9 @@ function zbs_getTagNames() {
  * @return array
  */
 function zbs_getUserTags($login) {
+	global $loginDB;
+    $login=$loginDB->real_escape_string($login);
     $result = array();
-    $login = mysql_real_escape_string($login);
     $query = "SELECT * from `tags` WHERE `login`='" . $login . "';";
     $all = simple_queryall($query);
     if (!empty($all)) {
@@ -901,8 +905,9 @@ function zbs_vservicesShow($login, $currency) {
  * @return string
  */
 function zbs_CUDShow($login, $us_config) {
+	global $loginDB;
+    $login=$loginDB->real_escape_string($login);
     $result = '';
-    $login = mysql_real_escape_string($login);
     if (isset($us_config['CUD_SHOW'])) {
         if ($us_config['CUD_SHOW']) {
             $query = "SELECT * from `cudiscounts` WHERE `login`='" . $login . "';";
@@ -1346,11 +1351,12 @@ function zbs_CopyrightsShow() {
  * @param string $note
  */
 function zbs_PaymentLog($login, $summ, $cashtypeid, $note) {
+	global $loginDB;
     $cashtypeid = vf($cashtypeid);
     $ctime = curdatetime();
     $userdata = zbs_UserGetStargazerData($login);
     $balance = $userdata['Cash'];
-    $note = mysql_real_escape_string($note);
+    $note=$loginDB->real_escape_string($note);
     $query = "INSERT INTO `payments` (`id` , `login` , `date` , `admin` , `balance` , `summ` , `cashtypeid` , `note` )
         VALUES (NULL , '" . $login . "', '" . $ctime . "', 'external', '" . $balance . "', '" . $summ . "', '" . $cashtypeid . "', '" . $note . "'); ";
     nr_query($query);
@@ -1481,10 +1487,11 @@ function whoami() {
  * @return void
  */
 function log_register($event) {
+	global $loginDB;
     $admin_login = whoami();
     $ip = $_SERVER['REMOTE_ADDR'];
     $current_time = curdatetime();
-    $event = mysql_real_escape_string($event);
+	$event=$loginDB->real_escape_string($event);
     $query = "INSERT INTO `weblogs` (`id`,`date`,`admin`,`ip`,`event`) VALUES(NULL,'" . $current_time . "','" . $admin_login . "','" . $ip . "','" . $event . "')";
     nr_query($query);
 }
@@ -1535,7 +1542,8 @@ function zbs_CashGetUserCreditExpire($login) {
  * @return string
  */
 function zbs_UserGetTariff($login) {
-    $login = mysql_real_escape_string($login);
+    global $loginDB;
+	$login=$loginDB->real_escape_string($login);
     $query = "SELECT `Tariff` from `users` WHERE `login`='" . $login . "'";
     $res = simple_query($query);
     return($res['Tariff']);
@@ -1548,7 +1556,8 @@ function zbs_UserGetTariff($login) {
  * @return float
  */
 function zbs_UserGetTariffPrice($tariff) {
-    $login = mysql_real_escape_string($tariff);
+    global $loginDB;
+	$tariff=$loginDB->real_escape_string($tariff);
     $query = "SELECT `Fee` from `tariffs` WHERE `name`='" . $tariff . "'";
     $res = simple_query($query);
     return($res['Fee']);
@@ -1561,7 +1570,8 @@ function zbs_UserGetTariffPrice($tariff) {
  * @return array
  */
 function zbs_UserGetTariffData($tariff) {
-    $login = mysql_real_escape_string($tariff);
+    global $loginDB;
+	$tariff=$loginDB->real_escape_string($tariff);
     $query = "SELECT * from `tariffs` WHERE `name`='" . $tariff . "'";
     $res = simple_query($query);
     return($res);
@@ -1577,10 +1587,11 @@ function zbs_UserGetTariffData($tariff) {
  * @return void
  */
 function zbs_CashAdd($login, $cash, $note) {
+	global $loginDB;
     $login = vf($login);
-    $cash = mysql_real_escape_string($cash);
+	$cash=$loginDB->real_escape_string($cash);
     $cashtype = 0;
-    $note = mysql_real_escape_string($note);
+	$note=$loginDB->real_escape_string($note);
     $date = curdatetime();
     $balance = zb_CashGetUserBalance($login);
     billing_addcash($login, $cash);
@@ -1642,7 +1653,8 @@ function zbs_months_array_wz() {
  * @return string
  */
 function zbs_StorageGet($key) {
-    $key = mysql_real_escape_string($key);
+	global $loginDB;
+    $key=$loginDB->real_escape_string($key);
     $query = "SELECT `value` from `ubstorage` WHERE `key`='" . $key . "'";
     $fetchdata = simple_query($query);
     if (!empty($fetchdata)) {
