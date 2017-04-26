@@ -41,6 +41,12 @@ if ($loginDB->connect_error) {
 	$loginDB->query("set collation_connection='".$db_config['character']."_general_ci'");
 }
 
+function loginDB_real_escape_string($parametr) {
+	global $loginDB;
+    $result=$loginDB->real_escape_string($parametr);
+	return($result);
+}
+
 /**
  * Returns cutted down entry data
  *
@@ -75,7 +81,7 @@ function vf($data,$mode=0)
 
 // function that executing query and returns array
 function simple_queryall($query) {
-global $query_counter;
+global $loginDB, $query_counter;
 	if (DEBUG) {
 	print ($query."\n");
 }
@@ -102,7 +108,6 @@ function simple_query($query) {
 
 //function update single field in table
 function simple_update_field($tablename,$field,$value,$where='') {
-    global $loginDB;
     $tablename=$loginDB->real_escape_string($tablename);
     $value=$loginDB->real_escape_string($value);
     $field=$loginDB->real_escape_string($field);
@@ -112,8 +117,7 @@ function simple_update_field($tablename,$field,$value,$where='') {
 
 //function that gets last id from table
 function  simple_get_lastid($tablename) {
-    global $loginDB;
-    $tablename=$loginDB->real_escape_string($tablename);
+    $tablename=loginDB_real_escape_string($tablename);
     $query="SELECT `id` from `".$tablename."` ORDER BY `id` DESC LIMIT 1";
     $result=simple_query($db, $query);
     return ($result['id']);
