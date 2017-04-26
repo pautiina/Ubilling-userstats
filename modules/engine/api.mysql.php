@@ -21,8 +21,8 @@ $query_counter=0;
  * MySQL database working
  *
  */
-if(!($db_config = @parse_ini_file('config/'.'mysql.ini'))) {
-	print(('Cannot load mysql configuration'));
+if(!($db_config = @parse_ini_file($_SERVER['DOCUMENT_ROOT'] . '/config/'.'mysql.ini'))) {
+	print('Cannot load mysql configuration');
 	exit;
 }
 
