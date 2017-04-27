@@ -252,7 +252,7 @@ if ($us_config['ADSERVICE_ENABLED']) {
             foreach ($availableServices as $eachService) {
                 $each = explode(":", $eachService);
                 $name = $each[0];
-                $tagid = isset($each[1]);
+                $tagid = $each[1];
                 if (!empty($allSheduled)) {
                     foreach ($allSheduled as $eachSheduled) {
                         if ($eachSheduled['param'] == $tagid) {
